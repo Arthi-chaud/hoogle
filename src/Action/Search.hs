@@ -54,7 +54,9 @@ actionSearch Search{..} = replicateM_ repeat_ $ -- deliberately reopen the datab
               Nothing -> hSupportsANSI stdout
             let (shown, hidden) = splitAt count' $ nubOrd $ map (targetResultDisplay link color' q) res
             if null res then
-                putStrLn "No results found"
+                if | json -> putStrLn "[]"
+                   | jsonl -> putStrLn ""
+                   | otherwise -> putStrLn "No results found"
              else if info then do
                  mapM_ (putStr . targetInfo color' q)
                   $ (case count of
