@@ -66,7 +66,7 @@ actionSearch Search{..} = replicateM_ repeat_ $ -- deliberately reopen the datab
                 if | json -> LBS.putStrLn $ JSON.encode $ maybe id take count $ map unHTMLtargetItem res
                    | jsonl -> mapM_ (LBS.putStrLn . JSON.encode) $ maybe id take count $ map unHTMLtargetItem res
                    | otherwise -> putStr $ unlines $ if numbers then addCounter shown else shown
-                when (hidden /= [] && not json) $ do
+                when (hidden /= [] && not json && not jsonl) $ do
                     whenNormal $ putStrLn $ "-- plus more results not shown, pass --count=" ++ show (count'+10) ++ " to see more"
         else do
             let parseType x = case parseQuery x of
